@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from StoreApp.models import Departamento, Produto
 from StoreApp.forms import CadrastroForm
+from StoreApp.forms import ContatoForm
 
 # Create your views here.
 def index(request): 
@@ -45,10 +46,44 @@ def sobre_empresa(request):
 
 def cadastro(request):
 
+    mensagem = "" # armazenar mensagem de sucesso ou erro
+
+    # se o formulario foi submetido
+    if request.method == 'POST':
+        formulario = CadrastroForm(request.POST)
+        if formulario.is_valid():
+            formulario.save()
+            formulario = CadrastroForm()
+            mensagem = "Cliente cadastrado com sucesso :)"
+        else:
+            mensagem = "Verifique erros abaixo: "
+ 
+
+    
+    
+    
+    #  se o formulario nãao foi submetido. Entrei na pag. pelo menu
+        # o form deve vir vazio
+        
+    else:
+        formulario = CadrastroForm()
+
     formulario = CadrastroForm()
 
     context = {
-        'formulario_cadastro' : formulario
+        'formulario_cadastro' : formulario,
+        'mensagem' : mensagem
         
     }
     return render (request, 'cadastro.html', context)
+
+def contato(request): 
+
+    mensagem = ''
+    formulario = ContatoForm()
+
+    context = {
+        'mensagem' : mensagem,
+        'formulario_contato' : formulario
+    }
+    return render(request, 'contato.html', context)
